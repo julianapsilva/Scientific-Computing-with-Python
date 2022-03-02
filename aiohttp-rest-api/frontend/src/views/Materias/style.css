@@ -1,0 +1,60 @@
+.materias-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    width: 100%;
+}
+
+.table {
+    max-width: 1000px;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+
+}
+
+.header-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid;
+    padding-bottom: 10px;
+    padding: 0 45px;
+
+}
+
+.header-table button {
+    display: block;
+    padding: 7px 25px;
+    background: #87f;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    font-size: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.header-table button:hover {
+    transition: all 0.3s;
+    transform: scale(1.03);
+}
+
+.actions {
+    border: none;
+    background: #87f;
+    margin-right: 10px;
+    padding: 7px;
+    border-radius: 25px;
+}
+
+.actions:hover{
+    cursor: pointer;
+}
