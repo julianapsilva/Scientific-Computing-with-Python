@@ -40,8 +40,14 @@ async def delete_class(request: web.Request) -> web.Response:
     return web.json_response({"status": "ok", "id": class_id})
 
 
+@web.middleware
+async def cors_middleware(request, handler):
+    response = await handler(request)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
 async def init_app() -> web.Application:
-    app = web.Application()
+    app = web.Application(middlewares=[cors_middleware])
     app.add_routes([web.post("/materias", add_class)])
     app.add_routes([web.get("/materias", get_all_classes)])
     app.add_routes([web.put("/materias/{id}", update_class)])
