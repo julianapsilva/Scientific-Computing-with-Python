@@ -23,10 +23,29 @@ async def get_all_classes(request: web.Request) -> web.Response:
     return web.json_response(result)
 
 
+async def update_class(request: web.Request) -> web.Response:
+    class_id = request.match_info["id"]
+    new_values = await request.json()
+    stmt = Materia.update().where(Materia.columns.id == class_id).values(new_values)
+    with engine.connect() as conn:
+        conn.execute(stmt)
+    return web.json_response({"status": "ok", "id": class_id})
+
+
+async def delete_class(request: web.Request) -> web.Response:
+    class_id = request.match_info["id"]
+    stmt = Materia.delete().where(Materia.c.id == class_id)
+    with engine.connect() as conn:
+        conn.execute(stmt)
+    return web.json_response({"status": "ok", "id": class_id})
+
+
 async def init_app() -> web.Application:
     app = web.Application()
     app.add_routes([web.post("/materias", add_class)])
     app.add_routes([web.get("/materias", get_all_classes)])
+    app.add_routes([web.put("/materias/{id}", update_class)])
+    app.add_routes([web.delete("/materias/{id}", delete_class)])
     return app
 
 web.run_app(init_app())
