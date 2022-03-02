@@ -2,6 +2,7 @@ from sqlalchemy import insert, select
 from aiohttp import web
 from db.data_definition import Materia
 from db.data_connection import engine
+import aiohttp_cors
 
 
 async def add_class(request: web.Request) -> web.Response:
@@ -40,18 +41,23 @@ async def delete_class(request: web.Request) -> web.Response:
     return web.json_response({"status": "ok", "id": class_id})
 
 
-@web.middleware
-async def cors_middleware(request, handler):
-    response = await handler(request)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response
-
 async def init_app() -> web.Application:
-    app = web.Application(middlewares=[cors_middleware])
+    app = web.Application()
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
+            allow_credentials=True,
+            expose_headers="*",
+            allow_headers="*",
+        )
+    })
+
     app.add_routes([web.post("/materias", add_class)])
     app.add_routes([web.get("/materias", get_all_classes)])
     app.add_routes([web.put("/materias/{id}", update_class)])
     app.add_routes([web.delete("/materias/{id}", delete_class)])
+
+    for route in list(app.router.routes()):
+        cors.add(route)
     return app
 
 web.run_app(init_app())
